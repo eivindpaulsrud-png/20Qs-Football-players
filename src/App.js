@@ -468,24 +468,186 @@ function App() {
       answer = currentPlayer.country === 'Czech Republic' ? t.yes : t.no;
     }
     
-    // FORBEDRET: Generell klubb-sjekk
-    // Hvis spørsmålet inneholder ord som "play", "played", "club", "team", sjekk mot alle klubber
-    else if (
-      (q.includes('play') || q.includes('spill') || q.includes('club') || q.includes('klubb') || q.includes('team') || q.includes('lag')) &&
-      !q.includes('premier league') && !q.includes('la liga') && !q.includes('serie a') && 
-      !q.includes('bundesliga') && !q.includes('ligue 1')
-    ) {
-      // Prøv å finne et klubbnavn i spørsmålet
-      // Fjern vanlige ord først
-      const cleanedQuestion = q
-        .replace(/did|does|has|have|he|she|the|player|ever|play|played|for|at|in|klub|klubb|spill|spilte|spilleren/g, '')
-        .trim();
-      
-      if (cleanedQuestion.length > 2) {
-        answer = playerHasClub(cleanedQuestion) ? t.yes : t.no;
-      } else {
-        counted = false;
+    // Spesifikke klubb-sjekker - utvid listen med flere klubber
+    else if (q.includes('real madrid')) {
+      answer = playerHasClub('real madrid') ? t.yes : t.no;
+    } else if (q.includes('barcelona') || q.includes('barca')) {
+      answer = playerHasClub('barcelona') ? t.yes : t.no;
+    } else if (q.includes('manchester united') || q.includes('man united') || q.includes('man utd')) {
+      answer = playerHasClub('manchester united') ? t.yes : t.no;
+    } else if (q.includes('manchester city') || q.includes('man city')) {
+      answer = playerHasClub('manchester city') ? t.yes : t.no;
+    } else if (q.includes('liverpool')) {
+      answer = playerHasClub('liverpool') ? t.yes : t.no;
+    } else if (q.includes('chelsea')) {
+      answer = playerHasClub('chelsea') ? t.yes : t.no;
+    } else if (q.includes('arsenal')) {
+      answer = playerHasClub('arsenal') ? t.yes : t.no;
+    } else if (q.includes('tottenham') || q.includes('spurs')) {
+      answer = playerHasClub('tottenham') ? t.yes : t.no;
+    } else if (q.includes('juventus') || q.includes('juve')) {
+      answer = playerHasClub('juventus') ? t.yes : t.no;
+    } else if (q.includes('ac milan') || (q.includes('milan') && !q.includes('inter'))) {
+      answer = playerHasClub('milan') ? t.yes : t.no;
+    } else if (q.includes('inter milan') || q.includes('inter')) {
+      answer = playerHasClub('inter') ? t.yes : t.no;
+    } else if (q.includes('bayern munich') || q.includes('bayern')) {
+      answer = playerHasClub('bayern') ? t.yes : t.no;
+    } else if (q.includes('borussia dortmund') || q.includes('dortmund')) {
+      answer = playerHasClub('dortmund') ? t.yes : t.no;
+    } else if (q.includes('psg') || q.includes('paris saint') || q.includes('paris')) {
+      answer = playerHasClub('psg') ? t.yes : t.no;
+    } else if (q.includes('atletico madrid') || q.includes('atletico')) {
+      answer = playerHasClub('atletico') ? t.yes : t.no;
+    } else if (q.includes('ajax')) {
+      answer = playerHasClub('ajax') ? t.yes : t.no;
+    } else if (q.includes('roma')) {
+      answer = playerHasClub('roma') ? t.yes : t.no;
+    } else if (q.includes('napoli')) {
+      answer = playerHasClub('napoli') ? t.yes : t.no;
+    } else if (q.includes('lazio')) {
+      answer = playerHasClub('lazio') ? t.yes : t.no;
+    } else if (q.includes('sevilla')) {
+      answer = playerHasClub('sevilla') ? t.yes : t.no;
+    } else if (q.includes('valencia')) {
+      answer = playerHasClub('valencia') ? t.yes : t.no;
+    } else if (q.includes('porto')) {
+      answer = playerHasClub('porto') ? t.yes : t.no;
+    } else if (q.includes('benfica')) {
+      answer = playerHasClub('benfica') ? t.yes : t.no;
+    } else if (q.includes('celtic')) {
+      answer = playerHasClub('celtic') ? t.yes : t.no;
+    } else if (q.includes('rangers')) {
+      answer = playerHasClub('rangers') ? t.yes : t.no;
+    } else if (q.includes('marseille')) {
+      answer = playerHasClub('marseille') ? t.yes : t.no;
+    } else if (q.includes('lyon')) {
+      answer = playerHasClub('lyon') ? t.yes : t.no;
+    } else if (q.includes('monaco')) {
+      answer = playerHasClub('monaco') ? t.yes : t.no;
+    } else if (q.includes('fiorentina')) {
+      answer = playerHasClub('fiorentina') ? t.yes : t.no;
+    } else if (q.includes('parma')) {
+      answer = playerHasClub('parma') ? t.yes : t.no;
+    } else if (q.includes('udinese')) {
+      answer = playerHasClub('udinese') ? t.yes : t.no;
+    } else if (q.includes('atalanta')) {
+      answer = playerHasClub('atalanta') ? t.yes : t.no;
+    } else if (q.includes('leicester')) {
+      answer = playerHasClub('leicester') ? t.yes : t.no;
+    } else if (q.includes('everton')) {
+      answer = playerHasClub('everton') ? t.yes : t.no;
+    } else if (q.includes('newcastle')) {
+      answer = playerHasClub('newcastle') ? t.yes : t.no;
+    } else if (q.includes('aston villa') || q.includes('villa')) {
+      answer = playerHasClub('villa') ? t.yes : t.no;
+    } else if (q.includes('west ham')) {
+      answer = playerHasClub('west ham') ? t.yes : t.no;
+    } else if (q.includes('wolves') || q.includes('wolverhampton')) {
+      answer = playerHasClub('wolverhampton') ? t.yes : t.no;
+    } else if (q.includes('leeds')) {
+      answer = playerHasClub('leeds') ? t.yes : t.no;
+    } else if (q.includes('blackburn')) {
+      answer = playerHasClub('blackburn') ? t.yes : t.no;
+    } else if (q.includes('bolton')) {
+      answer = playerHasClub('bolton') ? t.yes : t.no;
+    } else if (q.includes('sunderland')) {
+      answer = playerHasClub('sunderland') ? t.yes : t.no;
+    } else if (q.includes('psv')) {
+      answer = playerHasClub('psv') ? t.yes : t.no;
+    } else if (q.includes('bayer leverkusen') || q.includes('leverkusen')) {
+      answer = playerHasClub('leverkusen') ? t.yes : t.no;
+    } else if (q.includes('rb leipzig') || q.includes('leipzig')) {
+      answer = playerHasClub('leipzig') ? t.yes : t.no;
+    } else if (q.includes('schalke')) {
+      answer = playerHasClub('schalke') ? t.yes : t.no;
+    } else if (q.includes('hamburg')) {
+      answer = playerHasClub('hamburg') ? t.yes : t.no;
+    } else if (q.includes('werder bremen') || q.includes('bremen')) {
+      answer = playerHasClub('bremen') ? t.yes : t.no;
+    } else if (q.includes('villarreal')) {
+      answer = playerHasClub('villarreal') ? t.yes : t.no;
+    } else if (q.includes('deportivo')) {
+      answer = playerHasClub('deportivo') ? t.yes : t.no;
+    } else if (q.includes('real sociedad') || q.includes('sociedad')) {
+      answer = playerHasClub('sociedad') ? t.yes : t.no;
+    } else if (q.includes('crystal palace') || q.includes('palace')) {
+      answer = playerHasClub('palace') ? t.yes : t.no;
+    } else if (q.includes('swansea')) {
+      answer = playerHasClub('swansea') ? t.yes : t.no;
+    } else if (q.includes('southampton')) {
+      answer = playerHasClub('southampton') ? t.yes : t.no;
+    } else if (q.includes('fulham')) {
+      answer = playerHasClub('fulham') ? t.yes : t.no;
+    } else if (q.includes('brighton')) {
+      answer = playerHasClub('brighton') ? t.yes : t.no;
+    } else if (q.includes('watford')) {
+      answer = playerHasClub('watford') ? t.yes : t.no;
+    } else if (q.includes('stoke')) {
+      answer = playerHasClub('stoke') ? t.yes : t.no;
+    } else if (q.includes('flamengo')) {
+      answer = playerHasClub('flamengo') ? t.yes : t.no;
+    } else if (q.includes('corinthians')) {
+      answer = playerHasClub('corinthians') ? t.yes : t.no;
+    } else if (q.includes('river plate') || q.includes('river')) {
+      answer = playerHasClub('river') ? t.yes : t.no;
+    } else if (q.includes('boca juniors') || q.includes('boca')) {
+      answer = playerHasClub('boca') ? t.yes : t.no;
+    } else if (q.includes('santos')) {
+      answer = playerHasClub('santos') ? t.yes : t.no;
+    } else if (q.includes('palmeiras')) {
+      answer = playerHasClub('palmeiras') ? t.yes : t.no;
+    } else if (q.includes('inter miami') || q.includes('miami')) {
+      answer = playerHasClub('miami') ? t.yes : t.no;
+    } else if (q.includes('dynamo') || q.includes('kyiv')) {
+      answer = playerHasClub('dynamo') ? t.yes : t.no;
+    } else if (q.includes('shakhtar')) {
+      answer = playerHasClub('shakhtar') ? t.yes : t.no;
+    } else if (q.includes('zenit')) {
+      answer = playerHasClub('zenit') ? t.yes : t.no;
+    } else if (q.includes('spartak')) {
+      answer = playerHasClub('spartak') ? t.yes : t.no;
+    } else if (q.includes('galatasaray')) {
+      answer = playerHasClub('galatasaray') ? t.yes : t.no;
+    } else if (q.includes('fenerbahce')) {
+      answer = playerHasClub('fenerbahce') ? t.yes : t.no;
+    } else if (q.includes('besiktas')) {
+      answer = playerHasClub('besiktas') ? t.yes : t.no;
+    } else if (q.includes('bordeaux')) {
+      answer = playerHasClub('bordeaux') ? t.yes : t.no;
+    } else if (q.includes('lille')) {
+      answer = playerHasClub('lille') ? t.yes : t.no;
+    } else if (q.includes('montpellier')) {
+      answer = playerHasClub('montpellier') ? t.yes : t.no;
+    } else if (q.includes('verona')) {
+      answer = playerHasClub('verona') ? t.yes : t.no;
+    } else if (q.includes('sampdoria')) {
+      answer = playerHasClub('sampdoria') ? t.yes : t.no;
+    } else if (q.includes('genoa')) {
+      answer = playerHasClub('genoa') ? t.yes : t.no;
+    } else if (q.includes('torino')) {
+      answer = playerHasClub('torino') ? t.yes : t.no;
+    } else if (q.includes('bologna')) {
+      answer = playerHasClub('bologna') ? t.yes : t.no;
+    } else if (q.includes('valladolid')) {
+      answer = playerHasClub('valladolid') ? t.yes : t.no;
+    } else if (q.includes('sporting') || q.includes('lisbon')) {
+      answer = playerHasClub('sporting') ? t.yes : t.no;
+    } else if (q.includes('botafogo')) {
+      answer = playerHasClub('botafogo') ? t.yes : t.no;
+    } 
+    // GENERELL klubb-sjekk som siste utvei
+    else if (q.includes('play') || q.includes('spill') || q.includes('club') || q.includes('klubb')) {
+      // Prøv alle klubber fra spillerens liste
+      let foundMatch = false;
+      for (const club of currentPlayer.clubs) {
+        const normalizedClub = normalizeText(club);
+        if (normalizedClub.split(' ').some(word => word.length > 3 && q.includes(word))) {
+          foundMatch = true;
+          break;
+        }
       }
+      answer = foundMatch ? t.yes : t.no;
     }
     
     else {
