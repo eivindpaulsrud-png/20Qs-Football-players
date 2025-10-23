@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { playerDatabase } from './playerDatabase';
 import { Search, Trophy, Globe, Calendar, AlertCircle, CheckCircle, XCircle, Star, Filter, User, Award } from 'lucide-react';
 
 function App() {
