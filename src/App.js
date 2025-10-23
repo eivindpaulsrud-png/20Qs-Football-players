@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Trophy, Globe, Calendar, AlertCircle, CheckCircle, XCircle, Star, Filter } from 'lucide-react';
 
-const FootballQuizGame = () => {
+function App() {
   const [language, setLanguage] = useState('en');
   const [gameState, setGameState] = useState('language');
   const [selectedPeriod, setSelectedPeriod] = useState('');
@@ -321,13 +321,13 @@ const FootballQuizGame = () => {
       explanation = `${t.position} ${currentPlayer.position}`;
     } else if (q.includes('world cup') || q.includes('vm')) {
       answer = currentPlayer.worldCup ? t.yes : t.no;
-      explanation = currentPlayer.worldCup ? language === 'no' ? 'Vant VM' : 'Won World Cup' : language === 'no' ? 'Vant ikke VM' : 'Did not win World Cup';
+      explanation = currentPlayer.worldCup ? (language === 'no' ? 'Vant VM' : 'Won World Cup') : (language === 'no' ? 'Vant ikke VM' : 'Did not win World Cup');
     } else if (q.includes('ballon')) {
       answer = currentPlayer.ballon ? t.yes : t.no;
-      explanation = currentPlayer.ballon ? language === 'no' ? 'Vant Ballon d\'Or' : 'Won Ballon d\'Or' : language === 'no' ? 'Vant ikke Ballon d\'Or' : 'Did not win Ballon d\'Or';
+      explanation = currentPlayer.ballon ? (language === 'no' ? 'Vant Ballon d\'Or' : 'Won Ballon d\'Or') : (language === 'no' ? 'Vant ikke Ballon d\'Or' : 'Did not win Ballon d\'Or');
     } else if (q.includes('premier league')) {
       answer = currentPlayer.premierLeague ? t.yes : t.no;
-      explanation = currentPlayer.premierLeague ? language === 'no' ? 'Spilte i Premier League' : 'Played in Premier League' : language === 'no' ? 'Spilte ikke i Premier League' : 'Did not play in Premier League';
+      explanation = currentPlayer.premierLeague ? (language === 'no' ? 'Spilte i Premier League' : 'Played in Premier League') : (language === 'no' ? 'Spilte ikke i Premier League' : 'Did not play in Premier League');
     } else if (q.includes('tall') || q.includes('høy') || q.includes('height') || q.includes('over 180') || q.includes('over 185') || q.includes('under 175')) {
       if (q.includes('over 185') || q.includes('over 190')) {
         answer = currentPlayer.height > 185 ? t.yes : t.no;
@@ -339,7 +339,7 @@ const FootballQuizGame = () => {
       explanation = `${t.height} ${currentPlayer.height} ${t.cm}`;
     } else if (q.includes('beard') || q.includes('skjegg')) {
       answer = currentPlayer.beard ? t.yes : t.no;
-      explanation = currentPlayer.beard ? language === 'no' ? 'Har skjegg' : 'Has beard' : language === 'no' ? 'Har ikke skjegg' : 'No beard';
+      explanation = currentPlayer.beard ? (language === 'no' ? 'Har skjegg' : 'Has beard') : (language === 'no' ? 'Har ikke skjegg' : 'No beard');
     } else if (q.includes('blonde') || q.includes('blond') || q.includes('light hair') || q.includes('lyst hår')) {
       answer = currentPlayer.hair === 'blonde' || currentPlayer.hair === 'light' ? t.yes : t.no;
       explanation = language === 'no' ? `Hårfarge: ${currentPlayer.hair}` : `Hair: ${currentPlayer.hair}`;
@@ -791,6 +791,6 @@ const FootballQuizGame = () => {
       </div>
     </div>
   );
-};
+}
 
-export default FootballQuizGame;
+export default App;
