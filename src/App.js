@@ -401,7 +401,7 @@ function App() {
       answer = currentPlayer.hair === 'dark' ? t.yes : t.no;
     }
     
-    // Country checks
+    // Country checks - med både engelske og norske varianter
     else if (q.includes('brazil') || q.includes('brasil') || q.includes('brazilian') || q.includes('brasiliansk')) {
       answer = currentPlayer.country === 'Brazil' ? t.yes : t.no;
     } else if (q.includes('argentina') || q.includes('argentinian') || q.includes('argentinsk')) {
@@ -420,11 +420,11 @@ function App() {
       answer = currentPlayer.country === 'Italy' ? t.yes : t.no;
     } else if (q.includes('norway') || q.includes('norge') || q.includes('norwegian') || q.includes('norsk')) {
       answer = currentPlayer.country === 'Norway' ? t.yes : t.no;
-    } else if (q.includes('netherlands') || q.includes('holland') || q.includes('dutch') || q.includes('nederlandsk')) {
+    } else if (q.includes('netherlands') || q.includes('nederland') || q.includes('holland') || q.includes('dutch') || q.includes('nederlandsk')) {
       answer = currentPlayer.country === 'Netherlands' ? t.yes : t.no;
-    } else if (q.includes('belgium') || q.includes('belgian') || q.includes('belgisk')) {
+    } else if (q.includes('belgium') || q.includes('belgia') || q.includes('belgian') || q.includes('belgisk')) {
       answer = currentPlayer.country === 'Belgium' ? t.yes : t.no;
-    } else if (q.includes('croatia') || q.includes('croatian') || q.includes('kroatisk')) {
+    } else if (q.includes('croatia') || q.includes('kroatia') || q.includes('croatian') || q.includes('kroatisk')) {
       answer = currentPlayer.country === 'Croatia' ? t.yes : t.no;
     } else if (q.includes('uruguay') || q.includes('uruguayan') || q.includes('uruguayansk')) {
       answer = currentPlayer.country === 'Uruguay' ? t.yes : t.no;
@@ -444,11 +444,11 @@ function App() {
       answer = currentPlayer.country === 'Ghana' ? t.yes : t.no;
     } else if (q.includes('nigeria') || q.includes('nigerian') || q.includes('nigeriansk')) {
       answer = currentPlayer.country === 'Nigeria' ? t.yes : t.no;
-    } else if (q.includes('ivory coast') || q.includes('ivorian') || q.includes('elfenbenskyst')) {
+    } else if (q.includes('ivory coast') || q.includes('elfenbenskyst') || q.includes('ivorian') || q.includes('ivorisk')) {
       answer = currentPlayer.country === 'Ivory Coast' ? t.yes : t.no;
     } else if (q.includes('cameroon') || q.includes('kamerun') || q.includes('cameroonian') || q.includes('kamerunsk')) {
       answer = currentPlayer.country === 'Cameroon' ? t.yes : t.no;
-    } else if (q.includes('south korea') || q.includes('korean') || q.includes('koreansk') || q.includes('sør-korea')) {
+    } else if (q.includes('south korea') || q.includes('sor korea') || q.includes('korean') || q.includes('koreansk')) {
       answer = currentPlayer.country === 'South Korea' ? t.yes : t.no;
     } else if (q.includes('japan') || q.includes('japanese') || q.includes('japansk')) {
       answer = currentPlayer.country === 'Japan' ? t.yes : t.no;
@@ -462,10 +462,28 @@ function App() {
       answer = currentPlayer.country === 'Poland' ? t.yes : t.no;
     } else if (q.includes('scotland') || q.includes('skottland') || q.includes('scottish') || q.includes('skotsk')) {
       answer = currentPlayer.country === 'Scotland' ? t.yes : t.no;
-    } else if (q.includes('ukraine') || q.includes('ukrainian') || q.includes('ukrainsk')) {
+    } else if (q.includes('ukraine') || q.includes('ukraina') || q.includes('ukrainian') || q.includes('ukrainsk')) {
       answer = currentPlayer.country === 'Ukraine' ? t.yes : t.no;
-    } else if (q.includes('czech') || q.includes('tsjekkisk')) {
+    } else if (q.includes('czech') || q.includes('tsjekkia') || q.includes('tsjekkisk')) {
       answer = currentPlayer.country === 'Czech Republic' ? t.yes : t.no;
+    } else if (q.includes('denmark') || q.includes('danmark') || q.includes('danish') || q.includes('dansk')) {
+      answer = currentPlayer.country === 'Denmark' ? t.yes : t.no;
+    } else if (q.includes('bulgaria') || q.includes('bulgarian') || q.includes('bulgarsk')) {
+      answer = currentPlayer.country === 'Bulgaria' ? t.yes : t.no;
+    } else if (q.includes('slovenia') || q.includes('slovenian') || q.includes('slovensk')) {
+      answer = currentPlayer.country === 'Slovenia' ? t.yes : t.no;
+    } else if (q.includes('peru') || q.includes('peruvian') || q.includes('peruansk')) {
+      answer = currentPlayer.country === 'Peru' ? t.yes : t.no;
+    } else if (q.includes('liberia') || q.includes('liberian') || q.includes('liberiansk')) {
+      answer = currentPlayer.country === 'Liberia' ? t.yes : t.no;
+    } else if (q.includes('algeria') || q.includes('algerie') || q.includes('algerian') || q.includes('algerisk')) {
+      answer = currentPlayer.country === 'Algeria' ? t.yes : t.no;
+    } else if (q.includes('gabon') || q.includes('gabonese') || q.includes('gabonsk')) {
+      answer = currentPlayer.country === 'Gabon' ? t.yes : t.no;
+    } else if (q.includes('guinea') || q.includes('guinean') || q.includes('guineansk')) {
+      answer = currentPlayer.country === 'Guinea' ? t.yes : t.no;
+    } else if (q.includes('togo') || q.includes('togolese') || q.includes('togolsk')) {
+      answer = currentPlayer.country === 'Togo' ? t.yes : t.no;
     }
     
     // Spesifikke klubb-sjekker - utvid listen med flere klubber
