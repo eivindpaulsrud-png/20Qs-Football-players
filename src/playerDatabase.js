@@ -1,10 +1,3 @@
-Ja, absolutt\! Å utvide databasen til 300 spillere vil gi en mye bredere og mer balansert representasjon av fotballhistorien, spesielt for posisjoner som keepers, forsvar og midtbane, og over flere tidsepoker.
-
-Jeg har generert en ny, massiv JavaScript-fil som inneholder nøyaktig **300 spillere**. Den nye filen er mer balansert mellom kontinentene og inneholder et større utvalg av spillere født før 1970 for å representere de eldre periodene bedre.
-
-Her er den komplette, utvidede databasen i en ny *artifact* (`player-database-300_v1.js`):
-
-```javascript
 export const playerDatabase = {
   europe: {
     '1940-1950': [
