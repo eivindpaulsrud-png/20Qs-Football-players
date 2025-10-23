@@ -336,6 +336,19 @@ function App() {
       answer = currentPlayer.position === 'Goalkeeper' ? t.yes : t.no;
     }
     
+    // Continent/Verdensdel checks
+    else if (q.includes('europe') || q.includes('europa') || q.includes('european') || q.includes('europeisk')) {
+      answer = currentPlayer.birthContinent === 'europe' ? t.yes : t.no;
+    } else if (q.includes('south america') || q.includes('sor amerika') || q.includes('south american') || q.includes('soramerikansk')) {
+      answer = currentPlayer.birthContinent === 'south-america' ? t.yes : t.no;
+    } else if (q.includes('africa') || q.includes('afrika') || q.includes('african') || q.includes('afrikansk')) {
+      answer = currentPlayer.birthContinent === 'africa' ? t.yes : t.no;
+    } else if (q.includes('asia') || q.includes('asian') || q.includes('asiatisk')) {
+      answer = currentPlayer.birthContinent === 'asia' ? t.yes : t.no;
+    } else if (q.includes('north america') || q.includes('nord amerika') || q.includes('north american') || q.includes('nordamerikansk')) {
+      answer = currentPlayer.birthContinent === 'north-america' ? t.yes : t.no;
+    }
+    
     // Birth year checks
     else if (q.includes('born before') || q.includes('født før')) {
       const yearMatch = q.match(/\d{4}/);
