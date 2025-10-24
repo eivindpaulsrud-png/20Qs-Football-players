@@ -229,7 +229,8 @@ function App() {
     { id: 'south-america', label: language === 'no' ? 'Sør-Amerika' : 'South America' },
     { id: 'africa', label: language === 'no' ? 'Afrika' : 'Africa' },
     { id: 'asia', label: language === 'no' ? 'Asia' : 'Asia' },
-    { id: 'north-america', label: language === 'no' ? 'Nord-Amerika' : 'North America' }
+    { id: 'north-america', label: language === 'no' ? 'Nord-Amerika' : 'North America' },
+    { id: 'oceania', label: language === 'no' ? 'Oseania' : 'Oceania' }
   ];
 
   const leagues = [
@@ -336,17 +337,32 @@ function App() {
       answer = currentPlayer.position === 'Goalkeeper' ? t.yes : t.no;
     }
     
-    // Continent/Verdensdel checks
+    // Continent/Verdensdel checks - MED FALLBACK
     else if (q.includes('europe') || q.includes('europa') || q.includes('european') || q.includes('europeisk')) {
-      answer = currentPlayer.birthContinent === 'europe' ? t.yes : t.no;
+      // Sjekk først birthContinent, deretter land
+      const europeanCountries = ['France', 'Germany', 'Italy', 'Spain', 'England', 'Portugal', 'Netherlands', 'Belgium', 'Croatia', 'Poland', 'Ukraine', 'Czech Republic', 'Scotland', 'Denmark', 'Bulgaria', 'Slovenia', 'Norway', 'Sweden'];
+      const isEuropean = currentPlayer.birthContinent === 'europe' || europeanCountries.includes(currentPlayer.country);
+      answer = isEuropean ? t.yes : t.no;
     } else if (q.includes('south america') || q.includes('sor amerika') || q.includes('south american') || q.includes('soramerikansk')) {
-      answer = currentPlayer.birthContinent === 'south-america' ? t.yes : t.no;
+      const southAmericanCountries = ['Brazil', 'Argentina', 'Uruguay', 'Colombia', 'Chile', 'Peru'];
+      const isSouthAmerican = currentPlayer.birthContinent === 'south-america' || southAmericanCountries.includes(currentPlayer.country);
+      answer = isSouthAmerican ? t.yes : t.no;
     } else if (q.includes('africa') || q.includes('afrika') || q.includes('african') || q.includes('afrikansk')) {
-      answer = currentPlayer.birthContinent === 'africa' ? t.yes : t.no;
+      const africanCountries = ['Egypt', 'Senegal', 'Morocco', 'Ghana', 'Nigeria', 'Ivory Coast', 'Cameroon', 'Liberia', 'Algeria', 'Gabon', 'Guinea', 'Togo'];
+      const isAfrican = currentPlayer.birthContinent === 'africa' || africanCountries.includes(currentPlayer.country);
+      answer = isAfrican ? t.yes : t.no;
     } else if (q.includes('asia') || q.includes('asian') || q.includes('asiatisk')) {
-      answer = currentPlayer.birthContinent === 'asia' ? t.yes : t.no;
+      const asianCountries = ['South Korea', 'Japan'];
+      const isAsian = currentPlayer.birthContinent === 'asia' || asianCountries.includes(currentPlayer.country);
+      answer = isAsian ? t.yes : t.no;
     } else if (q.includes('north america') || q.includes('nord amerika') || q.includes('north american') || q.includes('nordamerikansk')) {
-      answer = currentPlayer.birthContinent === 'north-america' ? t.yes : t.no;
+      const northAmericanCountries = ['Mexico', 'Canada', 'USA'];
+      const isNorthAmerican = currentPlayer.birthContinent === 'north-america' || northAmericanCountries.includes(currentPlayer.country);
+      answer = isNorthAmerican ? t.yes : t.no;
+    } else if (q.includes('oceania') || q.includes('oseania') || q.includes('oceanian') || q.includes('oseanisk') || q.includes('australia') || q.includes('new zealand')) {
+      const oceanianCountries = ['Australia', 'New Zealand'];
+      const isOceanian = currentPlayer.birthContinent === 'oceania' || oceanianCountries.includes(currentPlayer.country);
+      answer = isOceanian ? t.yes : t.no;
     }
     
     // Birth year checks
@@ -497,6 +513,117 @@ function App() {
       answer = currentPlayer.country === 'Guinea' ? t.yes : t.no;
     } else if (q.includes('togo') || q.includes('togolese') || q.includes('togolsk')) {
       answer = currentPlayer.country === 'Togo' ? t.yes : t.no;
+    } else if (q.includes('australia') || q.includes('australian') || q.includes('australsk')) {
+      answer = currentPlayer.country === 'Australia' ? t.yes : t.no;
+    } else if (q.includes('new zealand') || q.includes('ny zealand') || q.includes('new zealander') || q.includes('nyzeelandsk')) {
+      answer = currentPlayer.country === 'New Zealand' ? t.yes : t.no;
+    }
+    
+    // Flere europeiske land
+    else if (q.includes('switzerland') || q.includes('sveits') || q.includes('swiss') || q.includes('sveitsisk')) {
+      answer = currentPlayer.country === 'Switzerland' ? t.yes : t.no;
+    } else if (q.includes('austria') || q.includes('osterrike') || q.includes('austrian') || q.includes('osterriksk')) {
+      answer = currentPlayer.country === 'Austria' ? t.yes : t.no;
+    } else if (q.includes('romania') || q.includes('romania') || q.includes('romanian') || q.includes('rumensk')) {
+      answer = currentPlayer.country === 'Romania' ? t.yes : t.no;
+    } else if (q.includes('serbia') || q.includes('serbian') || q.includes('serbisk')) {
+      answer = currentPlayer.country === 'Serbia' ? t.yes : t.no;
+    } else if (q.includes('greece') || q.includes('hellas') || q.includes('greek') || q.includes('gresk')) {
+      answer = currentPlayer.country === 'Greece' ? t.yes : t.no;
+    } else if (q.includes('turkey') || q.includes('tyrkia') || q.includes('turkish') || q.includes('tyrkisk')) {
+      answer = currentPlayer.country === 'Turkey' ? t.yes : t.no;
+    } else if (q.includes('russia') || q.includes('russland') || q.includes('russian') || q.includes('russisk')) {
+      answer = currentPlayer.country === 'Russia' ? t.yes : t.no;
+    } else if (q.includes('hungary') || q.includes('ungarn') || q.includes('hungarian') || q.includes('ungarsk')) {
+      answer = currentPlayer.country === 'Hungary' ? t.yes : t.no;
+    } else if (q.includes('iceland') || q.includes('island') || q.includes('icelandic') || q.includes('islandsk')) {
+      answer = currentPlayer.country === 'Iceland' ? t.yes : t.no;
+    } else if (q.includes('wales') || q.includes('welsh') || q.includes('walisisk')) {
+      answer = currentPlayer.country === 'Wales' ? t.yes : t.no;
+    } else if (q.includes('slovakia') || q.includes('slovak') || q.includes('slovakisk')) {
+      answer = currentPlayer.country === 'Slovakia' ? t.yes : t.no;
+    } else if (q.includes('republic of ireland') || q.includes('ireland') || q.includes('irland') || q.includes('irish') || q.includes('irsk')) {
+      answer = currentPlayer.country === 'Republic of Ireland' || currentPlayer.country === 'Ireland' ? t.yes : t.no;
+    } else if (q.includes('northern ireland') || q.includes('nord irland') || q.includes('nordirsk')) {
+      answer = currentPlayer.country === 'Northern Ireland' ? t.yes : t.no;
+    } else if (q.includes('finland') || q.includes('finnish') || q.includes('finsk')) {
+      answer = currentPlayer.country === 'Finland' ? t.yes : t.no;
+    } else if (q.includes('bosnia') || q.includes('bosnian') || q.includes('bosnisk')) {
+      answer = currentPlayer.country === 'Bosnia and Herzegovina' || currentPlayer.country === 'Bosnia' ? t.yes : t.no;
+    } else if (q.includes('albania') || q.includes('albanian') || q.includes('albansk')) {
+      answer = currentPlayer.country === 'Albania' ? t.yes : t.no;
+    } else if (q.includes('north macedonia') || q.includes('macedonia') || q.includes('makedonia') || q.includes('macedonian') || q.includes('makedonsk')) {
+      answer = currentPlayer.country === 'North Macedonia' || currentPlayer.country === 'Macedonia' ? t.yes : t.no;
+    } else if (q.includes('georgia') || q.includes('georgian') || q.includes('georgisk')) {
+      answer = currentPlayer.country === 'Georgia' ? t.yes : t.no;
+    }
+    
+    // Flere asiatiske land
+    else if (q.includes('saudi arabia') || q.includes('saudi') || q.includes('saudi arabisk')) {
+      answer = currentPlayer.country === 'Saudi Arabia' ? t.yes : t.no;
+    } else if (q.includes('iran') || q.includes('iranian') || q.includes('iransk')) {
+      answer = currentPlayer.country === 'Iran' ? t.yes : t.no;
+    } else if (q.includes('iraq') || q.includes('iraqi') || q.includes('iraksk')) {
+      answer = currentPlayer.country === 'Iraq' ? t.yes : t.no;
+    } else if (q.includes('qatar') || q.includes('qatari') || q.includes('qatarsk')) {
+      answer = currentPlayer.country === 'Qatar' ? t.yes : t.no;
+    } else if (q.includes('uae') || q.includes('united arab emirates') || q.includes('emiratisk')) {
+      answer = currentPlayer.country === 'UAE' || currentPlayer.country === 'United Arab Emirates' ? t.yes : t.no;
+    } else if (q.includes('china') || q.includes('kina') || q.includes('chinese') || q.includes('kinesisk')) {
+      answer = currentPlayer.country === 'China' ? t.yes : t.no;
+    } else if (q.includes('uzbekistan') || q.includes('uzbek') || q.includes('usbekisk')) {
+      answer = currentPlayer.country === 'Uzbekistan' ? t.yes : t.no;
+    } else if (q.includes('kuwait') || q.includes('kuwaiti') || q.includes('kuwaitisk')) {
+      answer = currentPlayer.country === 'Kuwait' ? t.yes : t.no;
+    } else if (q.includes('indonesia') || q.includes('indonesian') || q.includes('indonesisk')) {
+      answer = currentPlayer.country === 'Indonesia' ? t.yes : t.no;
+    }
+    
+    // Flere afrikanske land
+    else if (q.includes('tunisia') || q.includes('tunisian') || q.includes('tunisisk')) {
+      answer = currentPlayer.country === 'Tunisia' ? t.yes : t.no;
+    } else if (q.includes('south africa') || q.includes('sor afrika') || q.includes('south african') || q.includes('sorafrikansk')) {
+      answer = currentPlayer.country === 'South Africa' ? t.yes : t.no;
+    } else if (q.includes('burkina faso') || q.includes('burkinabe')) {
+      answer = currentPlayer.country === 'Burkina Faso' ? t.yes : t.no;
+    } else if (q.includes('mali') || q.includes('malian') || q.includes('malisk')) {
+      answer = currentPlayer.country === 'Mali' ? t.yes : t.no;
+    } else if (q.includes('angola') || q.includes('angolan') || q.includes('angolansk')) {
+      answer = currentPlayer.country === 'Angola' ? t.yes : t.no;
+    } else if (q.includes('dr congo') || q.includes('congo') || q.includes('congolese') || q.includes('kongolesisk')) {
+      answer = currentPlayer.country === 'DR Congo' || currentPlayer.country === 'Congo' ? t.yes : t.no;
+    } else if (q.includes('zimbabwe') || q.includes('zimbabwean') || q.includes('zimbabwisk')) {
+      answer = currentPlayer.country === 'Zimbabwe' ? t.yes : t.no;
+    }
+    
+    // Flere nordamerikanske land
+    else if (q.includes('costa rica') || q.includes('costa rican') || q.includes('costaricansk')) {
+      answer = currentPlayer.country === 'Costa Rica' ? t.yes : t.no;
+    } else if (q.includes('honduras') || q.includes('honduran') || q.includes('honduransk')) {
+      answer = currentPlayer.country === 'Honduras' ? t.yes : t.no;
+    } else if (q.includes('jamaica') || q.includes('jamaican') || q.includes('jamaikansk')) {
+      answer = currentPlayer.country === 'Jamaica' ? t.yes : t.no;
+    } else if (q.includes('trinidad') || q.includes('tobago') || q.includes('trinidadian')) {
+      answer = currentPlayer.country === 'Trinidad and Tobago' || currentPlayer.country === 'Trinidad' ? t.yes : t.no;
+    } else if (q.includes('panama') || q.includes('panamanian') || q.includes('panamansk')) {
+      answer = currentPlayer.country === 'Panama' ? t.yes : t.no;
+    } else if (q.includes('el salvador') || q.includes('salvadoran') || q.includes('salvadoransk')) {
+      answer = currentPlayer.country === 'El Salvador' ? t.yes : t.no;
+    } else if (q.includes('cuba') || q.includes('cuban') || q.includes('kubansk')) {
+      answer = currentPlayer.country === 'Cuba' ? t.yes : t.no;
+    } else if (q.includes('haiti') || q.includes('haitian') || q.includes('haitisk')) {
+      answer = currentPlayer.country === 'Haiti' ? t.yes : t.no;
+    }
+    
+    // Flere søramerikanske land
+    else if (q.includes('ecuador') || q.includes('ecuadorian') || q.includes('ecuadoriansk')) {
+      answer = currentPlayer.country === 'Ecuador' ? t.yes : t.no;
+    } else if (q.includes('paraguay') || q.includes('paraguayan') || q.includes('paraguayansk')) {
+      answer = currentPlayer.country === 'Paraguay' ? t.yes : t.no;
+    } else if (q.includes('bolivia') || q.includes('bolivian') || q.includes('boliviansk')) {
+      answer = currentPlayer.country === 'Bolivia' ? t.yes : t.no;
+    } else if (q.includes('venezuela') || q.includes('venezuelan') || q.includes('venezuelansk')) {
+      answer = currentPlayer.country === 'Venezuela' ? t.yes : t.no;
     }
     
     // Spesifikke klubb-sjekker - utvid listen med flere klubber
