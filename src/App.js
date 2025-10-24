@@ -36,11 +36,11 @@ function App() {
   const normalizeText = (text) => {
     return text
       .toLowerCase()
-      .normalize("NFD") // Splitter tegn med aksenter
-      .replace(/[\u0300-\u036f]/g, "") // Fjerner aksenter
-      .replace(/[''`´]/g, "") // Fjerner apostrofer
-      .replace(/[-]/g, " ") // Erstatter bindestrek med mellomrom
-      .replace(/[^\w\s]/g, "") // Fjerner andre spesialtegn
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[''`´]/g, "")
+      .replace(/[-]/g, " ")
+      .replace(/[^\w\s]/g, "")
       .trim();
   };
 
@@ -49,8 +49,17 @@ function App() {
     const normalizedQuery = normalizeText(clubQuery);
     return currentPlayer.clubs.some(club => {
       const normalizedClub = normalizeText(club);
-      // Sjekk om spørsmålet inneholder klubbnavnet ELLER omvendt
       return normalizedClub.includes(normalizedQuery) || normalizedQuery.includes(normalizedClub);
+    });
+  };
+
+  // HJELPEFUNKSJON: Sjekk om spilleren har spilt i en bestemt liga
+  const playerPlayedInLeague = (leagueClubs) => {
+    return currentPlayer.clubs.some(club => {
+      const normalizedClub = normalizeText(club);
+      return leagueClubs.some(leagueClub => 
+        normalizedClub.includes(leagueClub) || leagueClub.includes(normalizedClub)
+      );
     });
   };
 
@@ -326,8 +335,62 @@ function App() {
     let answer = 'Unknown';
     let counted = true;
 
+    // LIGA-SJEKKER: Skiller mellom SPILT I og VUNNET
+    
+    // Premier League
+    if ((q.includes('play') || q.includes('spill')) && q.includes('premier league')) {
+      const plClubs = ['manchester united', 'man united', 'manchester city', 'man city', 
+                       'liverpool', 'chelsea', 'arsenal', 'tottenham', 'leicester', 
+                       'everton', 'newcastle', 'aston villa', 'west ham', 'wolves', 
+                       'wolverhampton', 'leeds', 'blackburn', 'bolton', 'sunderland', 
+                       'crystal palace', 'swansea', 'southampton', 'fulham', 'brighton', 
+                       'watford', 'stoke'];
+      answer = playerPlayedInLeague(plClubs) ? t.yes : t.no;
+    } else if ((q.includes('won') || q.includes('vunnet') || q.includes('win')) && q.includes('premier league')) {
+      answer = currentPlayer.premierLeague ? t.yes : t.no;
+    }
+    
+    // La Liga
+    else if ((q.includes('play') || q.includes('spill')) && (q.includes('la liga') || (q.includes('spanish') && q.includes('league')))) {
+      const laLigaClubs = ['real madrid', 'barcelona', 'atletico madrid', 'atletico', 
+                           'valencia', 'sevilla', 'villarreal', 'deportivo', 'real sociedad', 
+                           'sociedad', 'valladolid'];
+      answer = playerPlayedInLeague(laLigaClubs) ? t.yes : t.no;
+    } else if ((q.includes('won') || q.includes('vunnet') || q.includes('win')) && (q.includes('la liga') || (q.includes('spanish') && q.includes('league')))) {
+      answer = currentPlayer.laLiga ? t.yes : t.no;
+    }
+    
+    // Serie A
+    else if ((q.includes('play') || q.includes('spill')) && (q.includes('serie a') || (q.includes('italian') && q.includes('league')))) {
+      const serieAClubs = ['juventus', 'juve', 'milan', 'inter', 'inter milan', 'roma', 
+                           'napoli', 'lazio', 'fiorentina', 'parma', 'udinese', 'atalanta', 
+                           'verona', 'sampdoria', 'genoa', 'torino', 'bologna'];
+      answer = playerPlayedInLeague(serieAClubs) ? t.yes : t.no;
+    } else if ((q.includes('won') || q.includes('vunnet') || q.includes('win')) && (q.includes('serie a') || (q.includes('italian') && q.includes('league')))) {
+      answer = currentPlayer.serieA ? t.yes : t.no;
+    }
+    
+    // Bundesliga
+    else if ((q.includes('play') || q.includes('spill')) && (q.includes('bundesliga') || (q.includes('german') && q.includes('league')))) {
+      const bundesligaClubs = ['bayern', 'bayern munich', 'borussia dortmund', 'dortmund', 
+                               'bayer leverkusen', 'leverkusen', 'rb leipzig', 'leipzig', 
+                               'schalke', 'hamburg', 'werder bremen', 'bremen'];
+      answer = playerPlayedInLeague(bundesligaClubs) ? t.yes : t.no;
+    } else if ((q.includes('won') || q.includes('vunnet') || q.includes('win')) && (q.includes('bundesliga') || (q.includes('german') && q.includes('league')))) {
+      answer = currentPlayer.bundesliga ? t.yes : t.no;
+    }
+    
+    // Ligue 1
+    else if ((q.includes('play') || q.includes('spill')) && (q.includes('ligue 1') || q.includes('ligue 1') || (q.includes('french') && q.includes('league')))) {
+      const ligue1Clubs = ['psg', 'paris', 'paris saint', 'marseille', 'lyon', 'monaco', 
+                           'bordeaux', 'lille', 'montpellier'];
+      answer = playerPlayedInLeague(ligue1Clubs) ? t.yes : t.no;
+    } else if ((q.includes('won') || q.includes('vunnet') || q.includes('win')) && (q.includes('ligue 1') || q.includes('ligue 1') || (q.includes('french') && q.includes('league')))) {
+      answer = currentPlayer.ligue1 ? t.yes : t.no;
+    }
+    
     // Position checks
-    if (q.includes('forward') || q.includes('striker') || q.includes('attacker') || q.includes('spiss')) {
+    else if (q.includes('forward') || q.includes('striker') || q.includes('attacker') || q.includes('spiss')) {
       answer = currentPlayer.position === 'Forward' ? t.yes : t.no;
     } else if (q.includes('midfielder') || q.includes('midfield') || q.includes('midtbane')) {
       answer = currentPlayer.position === 'Midfielder' ? t.yes : t.no;
@@ -337,9 +400,8 @@ function App() {
       answer = currentPlayer.position === 'Goalkeeper' ? t.yes : t.no;
     }
     
-    // Continent/Verdensdel checks - MED FALLBACK
+    // Continent checks
     else if (q.includes('europe') || q.includes('europa') || q.includes('european') || q.includes('europeisk')) {
-      // Sjekk først birthContinent, deretter land
       const europeanCountries = ['France', 'Germany', 'Italy', 'Spain', 'England', 'Portugal', 'Netherlands', 'Belgium', 'Croatia', 'Poland', 'Ukraine', 'Czech Republic', 'Scotland', 'Denmark', 'Bulgaria', 'Slovenia', 'Norway', 'Sweden'];
       const isEuropean = currentPlayer.birthContinent === 'europe' || europeanCountries.includes(currentPlayer.country);
       answer = isEuropean ? t.yes : t.no;
@@ -395,19 +457,6 @@ function App() {
       answer = currentPlayer.ballonDor ? t.yes : t.no;
     }
     
-    // League title checks
-    else if (q.includes('premier league')) {
-      answer = currentPlayer.premierLeague ? t.yes : t.no;
-    } else if (q.includes('la liga') || (q.includes('spanish') && q.includes('league'))) {
-      answer = currentPlayer.laLiga ? t.yes : t.no;
-    } else if (q.includes('serie a') || (q.includes('italian') && q.includes('league'))) {
-      answer = currentPlayer.serieA ? t.yes : t.no;
-    } else if (q.includes('bundesliga') || (q.includes('german') && q.includes('league'))) {
-      answer = currentPlayer.bundesliga ? t.yes : t.no;
-    } else if (q.includes('ligue 1') || q.includes('ligue 1') || (q.includes('french') && q.includes('league'))) {
-      answer = currentPlayer.ligue1 ? t.yes : t.no;
-    }
-    
     // Height checks
     else if (q.includes('tall') || q.includes('høy') || q.includes('height') || q.includes('over 180') || q.includes('over 185') || q.includes('under 175')) {
       if (q.includes('over 185') || q.includes('over 190')) {
@@ -430,7 +479,7 @@ function App() {
       answer = currentPlayer.hair === 'dark' ? t.yes : t.no;
     }
     
-    // Country checks - med både engelske og norske varianter
+    // Country checks
     else if (q.includes('brazil') || q.includes('brasil') || q.includes('brazilian') || q.includes('brasiliansk')) {
       answer = currentPlayer.country === 'Brazil' ? t.yes : t.no;
     } else if (q.includes('argentina') || q.includes('argentinian') || q.includes('argentinsk')) {
@@ -481,152 +530,13 @@ function App() {
       answer = currentPlayer.country === 'South Korea' ? t.yes : t.no;
     } else if (q.includes('japan') || q.includes('japanese') || q.includes('japansk')) {
       answer = currentPlayer.country === 'Japan' ? t.yes : t.no;
-    } else if (q.includes('canada') || q.includes('canadian') || q.includes('kanadisk')) {
-      answer = currentPlayer.country === 'Canada' ? t.yes : t.no;
-    } else if (q.includes('usa') || q.includes('united states') || q.includes('american') || q.includes('amerikansk')) {
-      answer = currentPlayer.country === 'USA' ? t.yes : t.no;
     } else if (q.includes('sweden') || q.includes('sverige') || q.includes('swedish') || q.includes('svensk')) {
       answer = currentPlayer.country === 'Sweden' ? t.yes : t.no;
     } else if (q.includes('poland') || q.includes('polen') || q.includes('polish') || q.includes('polsk')) {
       answer = currentPlayer.country === 'Poland' ? t.yes : t.no;
-    } else if (q.includes('scotland') || q.includes('skottland') || q.includes('scottish') || q.includes('skotsk')) {
-      answer = currentPlayer.country === 'Scotland' ? t.yes : t.no;
-    } else if (q.includes('ukraine') || q.includes('ukraina') || q.includes('ukrainian') || q.includes('ukrainsk')) {
-      answer = currentPlayer.country === 'Ukraine' ? t.yes : t.no;
-    } else if (q.includes('czech') || q.includes('tsjekkia') || q.includes('tsjekkisk')) {
-      answer = currentPlayer.country === 'Czech Republic' ? t.yes : t.no;
-    } else if (q.includes('denmark') || q.includes('danmark') || q.includes('danish') || q.includes('dansk')) {
-      answer = currentPlayer.country === 'Denmark' ? t.yes : t.no;
-    } else if (q.includes('bulgaria') || q.includes('bulgarian') || q.includes('bulgarsk')) {
-      answer = currentPlayer.country === 'Bulgaria' ? t.yes : t.no;
-    } else if (q.includes('slovenia') || q.includes('slovenian') || q.includes('slovensk')) {
-      answer = currentPlayer.country === 'Slovenia' ? t.yes : t.no;
-    } else if (q.includes('peru') || q.includes('peruvian') || q.includes('peruansk')) {
-      answer = currentPlayer.country === 'Peru' ? t.yes : t.no;
-    } else if (q.includes('liberia') || q.includes('liberian') || q.includes('liberiansk')) {
-      answer = currentPlayer.country === 'Liberia' ? t.yes : t.no;
-    } else if (q.includes('algeria') || q.includes('algerie') || q.includes('algerian') || q.includes('algerisk')) {
-      answer = currentPlayer.country === 'Algeria' ? t.yes : t.no;
-    } else if (q.includes('gabon') || q.includes('gabonese') || q.includes('gabonsk')) {
-      answer = currentPlayer.country === 'Gabon' ? t.yes : t.no;
-    } else if (q.includes('guinea') || q.includes('guinean') || q.includes('guineansk')) {
-      answer = currentPlayer.country === 'Guinea' ? t.yes : t.no;
-    } else if (q.includes('togo') || q.includes('togolese') || q.includes('togolsk')) {
-      answer = currentPlayer.country === 'Togo' ? t.yes : t.no;
-    } else if (q.includes('australia') || q.includes('australian') || q.includes('australsk')) {
-      answer = currentPlayer.country === 'Australia' ? t.yes : t.no;
-    } else if (q.includes('new zealand') || q.includes('ny zealand') || q.includes('new zealander') || q.includes('nyzeelandsk')) {
-      answer = currentPlayer.country === 'New Zealand' ? t.yes : t.no;
     }
     
-    // Flere europeiske land
-    else if (q.includes('switzerland') || q.includes('sveits') || q.includes('swiss') || q.includes('sveitsisk')) {
-      answer = currentPlayer.country === 'Switzerland' ? t.yes : t.no;
-    } else if (q.includes('austria') || q.includes('osterrike') || q.includes('austrian') || q.includes('osterriksk')) {
-      answer = currentPlayer.country === 'Austria' ? t.yes : t.no;
-    } else if (q.includes('romania') || q.includes('romania') || q.includes('romanian') || q.includes('rumensk')) {
-      answer = currentPlayer.country === 'Romania' ? t.yes : t.no;
-    } else if (q.includes('serbia') || q.includes('serbian') || q.includes('serbisk')) {
-      answer = currentPlayer.country === 'Serbia' ? t.yes : t.no;
-    } else if (q.includes('greece') || q.includes('hellas') || q.includes('greek') || q.includes('gresk')) {
-      answer = currentPlayer.country === 'Greece' ? t.yes : t.no;
-    } else if (q.includes('turkey') || q.includes('tyrkia') || q.includes('turkish') || q.includes('tyrkisk')) {
-      answer = currentPlayer.country === 'Turkey' ? t.yes : t.no;
-    } else if (q.includes('russia') || q.includes('russland') || q.includes('russian') || q.includes('russisk')) {
-      answer = currentPlayer.country === 'Russia' ? t.yes : t.no;
-    } else if (q.includes('hungary') || q.includes('ungarn') || q.includes('hungarian') || q.includes('ungarsk')) {
-      answer = currentPlayer.country === 'Hungary' ? t.yes : t.no;
-    } else if (q.includes('iceland') || q.includes('island') || q.includes('icelandic') || q.includes('islandsk')) {
-      answer = currentPlayer.country === 'Iceland' ? t.yes : t.no;
-    } else if (q.includes('wales') || q.includes('welsh') || q.includes('walisisk')) {
-      answer = currentPlayer.country === 'Wales' ? t.yes : t.no;
-    } else if (q.includes('slovakia') || q.includes('slovak') || q.includes('slovakisk')) {
-      answer = currentPlayer.country === 'Slovakia' ? t.yes : t.no;
-    } else if (q.includes('republic of ireland') || q.includes('ireland') || q.includes('irland') || q.includes('irish') || q.includes('irsk')) {
-      answer = currentPlayer.country === 'Republic of Ireland' || currentPlayer.country === 'Ireland' ? t.yes : t.no;
-    } else if (q.includes('northern ireland') || q.includes('nord irland') || q.includes('nordirsk')) {
-      answer = currentPlayer.country === 'Northern Ireland' ? t.yes : t.no;
-    } else if (q.includes('finland') || q.includes('finnish') || q.includes('finsk')) {
-      answer = currentPlayer.country === 'Finland' ? t.yes : t.no;
-    } else if (q.includes('bosnia') || q.includes('bosnian') || q.includes('bosnisk')) {
-      answer = currentPlayer.country === 'Bosnia and Herzegovina' || currentPlayer.country === 'Bosnia' ? t.yes : t.no;
-    } else if (q.includes('albania') || q.includes('albanian') || q.includes('albansk')) {
-      answer = currentPlayer.country === 'Albania' ? t.yes : t.no;
-    } else if (q.includes('north macedonia') || q.includes('macedonia') || q.includes('makedonia') || q.includes('macedonian') || q.includes('makedonsk')) {
-      answer = currentPlayer.country === 'North Macedonia' || currentPlayer.country === 'Macedonia' ? t.yes : t.no;
-    } else if (q.includes('georgia') || q.includes('georgian') || q.includes('georgisk')) {
-      answer = currentPlayer.country === 'Georgia' ? t.yes : t.no;
-    }
-    
-    // Flere asiatiske land
-    else if (q.includes('saudi arabia') || q.includes('saudi') || q.includes('saudi arabisk')) {
-      answer = currentPlayer.country === 'Saudi Arabia' ? t.yes : t.no;
-    } else if (q.includes('iran') || q.includes('iranian') || q.includes('iransk')) {
-      answer = currentPlayer.country === 'Iran' ? t.yes : t.no;
-    } else if (q.includes('iraq') || q.includes('iraqi') || q.includes('iraksk')) {
-      answer = currentPlayer.country === 'Iraq' ? t.yes : t.no;
-    } else if (q.includes('qatar') || q.includes('qatari') || q.includes('qatarsk')) {
-      answer = currentPlayer.country === 'Qatar' ? t.yes : t.no;
-    } else if (q.includes('uae') || q.includes('united arab emirates') || q.includes('emiratisk')) {
-      answer = currentPlayer.country === 'UAE' || currentPlayer.country === 'United Arab Emirates' ? t.yes : t.no;
-    } else if (q.includes('china') || q.includes('kina') || q.includes('chinese') || q.includes('kinesisk')) {
-      answer = currentPlayer.country === 'China' ? t.yes : t.no;
-    } else if (q.includes('uzbekistan') || q.includes('uzbek') || q.includes('usbekisk')) {
-      answer = currentPlayer.country === 'Uzbekistan' ? t.yes : t.no;
-    } else if (q.includes('kuwait') || q.includes('kuwaiti') || q.includes('kuwaitisk')) {
-      answer = currentPlayer.country === 'Kuwait' ? t.yes : t.no;
-    } else if (q.includes('indonesia') || q.includes('indonesian') || q.includes('indonesisk')) {
-      answer = currentPlayer.country === 'Indonesia' ? t.yes : t.no;
-    }
-    
-    // Flere afrikanske land
-    else if (q.includes('tunisia') || q.includes('tunisian') || q.includes('tunisisk')) {
-      answer = currentPlayer.country === 'Tunisia' ? t.yes : t.no;
-    } else if (q.includes('south africa') || q.includes('sor afrika') || q.includes('south african') || q.includes('sorafrikansk')) {
-      answer = currentPlayer.country === 'South Africa' ? t.yes : t.no;
-    } else if (q.includes('burkina faso') || q.includes('burkinabe')) {
-      answer = currentPlayer.country === 'Burkina Faso' ? t.yes : t.no;
-    } else if (q.includes('mali') || q.includes('malian') || q.includes('malisk')) {
-      answer = currentPlayer.country === 'Mali' ? t.yes : t.no;
-    } else if (q.includes('angola') || q.includes('angolan') || q.includes('angolansk')) {
-      answer = currentPlayer.country === 'Angola' ? t.yes : t.no;
-    } else if (q.includes('dr congo') || q.includes('congo') || q.includes('congolese') || q.includes('kongolesisk')) {
-      answer = currentPlayer.country === 'DR Congo' || currentPlayer.country === 'Congo' ? t.yes : t.no;
-    } else if (q.includes('zimbabwe') || q.includes('zimbabwean') || q.includes('zimbabwisk')) {
-      answer = currentPlayer.country === 'Zimbabwe' ? t.yes : t.no;
-    }
-    
-    // Flere nordamerikanske land
-    else if (q.includes('costa rica') || q.includes('costa rican') || q.includes('costaricansk')) {
-      answer = currentPlayer.country === 'Costa Rica' ? t.yes : t.no;
-    } else if (q.includes('honduras') || q.includes('honduran') || q.includes('honduransk')) {
-      answer = currentPlayer.country === 'Honduras' ? t.yes : t.no;
-    } else if (q.includes('jamaica') || q.includes('jamaican') || q.includes('jamaikansk')) {
-      answer = currentPlayer.country === 'Jamaica' ? t.yes : t.no;
-    } else if (q.includes('trinidad') || q.includes('tobago') || q.includes('trinidadian')) {
-      answer = currentPlayer.country === 'Trinidad and Tobago' || currentPlayer.country === 'Trinidad' ? t.yes : t.no;
-    } else if (q.includes('panama') || q.includes('panamanian') || q.includes('panamansk')) {
-      answer = currentPlayer.country === 'Panama' ? t.yes : t.no;
-    } else if (q.includes('el salvador') || q.includes('salvadoran') || q.includes('salvadoransk')) {
-      answer = currentPlayer.country === 'El Salvador' ? t.yes : t.no;
-    } else if (q.includes('cuba') || q.includes('cuban') || q.includes('kubansk')) {
-      answer = currentPlayer.country === 'Cuba' ? t.yes : t.no;
-    } else if (q.includes('haiti') || q.includes('haitian') || q.includes('haitisk')) {
-      answer = currentPlayer.country === 'Haiti' ? t.yes : t.no;
-    }
-    
-    // Flere søramerikanske land
-    else if (q.includes('ecuador') || q.includes('ecuadorian') || q.includes('ecuadoriansk')) {
-      answer = currentPlayer.country === 'Ecuador' ? t.yes : t.no;
-    } else if (q.includes('paraguay') || q.includes('paraguayan') || q.includes('paraguayansk')) {
-      answer = currentPlayer.country === 'Paraguay' ? t.yes : t.no;
-    } else if (q.includes('bolivia') || q.includes('bolivian') || q.includes('boliviansk')) {
-      answer = currentPlayer.country === 'Bolivia' ? t.yes : t.no;
-    } else if (q.includes('venezuela') || q.includes('venezuelan') || q.includes('venezuelansk')) {
-      answer = currentPlayer.country === 'Venezuela' ? t.yes : t.no;
-    }
-    
-    // Spesifikke klubb-sjekker - utvid listen med flere klubber
+    // Spesifikke klubb-sjekker
     else if (q.includes('real madrid')) {
       answer = playerHasClub('real madrid') ? t.yes : t.no;
     } else if (q.includes('barcelona') || q.includes('barca')) {
@@ -659,144 +569,10 @@ function App() {
       answer = playerHasClub('atletico') ? t.yes : t.no;
     } else if (q.includes('ajax')) {
       answer = playerHasClub('ajax') ? t.yes : t.no;
-    } else if (q.includes('roma')) {
-      answer = playerHasClub('roma') ? t.yes : t.no;
-    } else if (q.includes('napoli')) {
-      answer = playerHasClub('napoli') ? t.yes : t.no;
-    } else if (q.includes('lazio')) {
-      answer = playerHasClub('lazio') ? t.yes : t.no;
-    } else if (q.includes('sevilla')) {
-      answer = playerHasClub('sevilla') ? t.yes : t.no;
-    } else if (q.includes('valencia')) {
-      answer = playerHasClub('valencia') ? t.yes : t.no;
-    } else if (q.includes('porto')) {
-      answer = playerHasClub('porto') ? t.yes : t.no;
-    } else if (q.includes('benfica')) {
-      answer = playerHasClub('benfica') ? t.yes : t.no;
-    } else if (q.includes('celtic')) {
-      answer = playerHasClub('celtic') ? t.yes : t.no;
-    } else if (q.includes('rangers')) {
-      answer = playerHasClub('rangers') ? t.yes : t.no;
-    } else if (q.includes('marseille')) {
-      answer = playerHasClub('marseille') ? t.yes : t.no;
-    } else if (q.includes('lyon')) {
-      answer = playerHasClub('lyon') ? t.yes : t.no;
-    } else if (q.includes('monaco')) {
-      answer = playerHasClub('monaco') ? t.yes : t.no;
-    } else if (q.includes('fiorentina')) {
-      answer = playerHasClub('fiorentina') ? t.yes : t.no;
-    } else if (q.includes('parma')) {
-      answer = playerHasClub('parma') ? t.yes : t.no;
-    } else if (q.includes('udinese')) {
-      answer = playerHasClub('udinese') ? t.yes : t.no;
-    } else if (q.includes('atalanta')) {
-      answer = playerHasClub('atalanta') ? t.yes : t.no;
-    } else if (q.includes('leicester')) {
-      answer = playerHasClub('leicester') ? t.yes : t.no;
-    } else if (q.includes('everton')) {
-      answer = playerHasClub('everton') ? t.yes : t.no;
-    } else if (q.includes('newcastle')) {
-      answer = playerHasClub('newcastle') ? t.yes : t.no;
-    } else if (q.includes('aston villa') || q.includes('villa')) {
-      answer = playerHasClub('villa') ? t.yes : t.no;
-    } else if (q.includes('west ham')) {
-      answer = playerHasClub('west ham') ? t.yes : t.no;
-    } else if (q.includes('wolves') || q.includes('wolverhampton')) {
-      answer = playerHasClub('wolverhampton') ? t.yes : t.no;
-    } else if (q.includes('leeds')) {
-      answer = playerHasClub('leeds') ? t.yes : t.no;
-    } else if (q.includes('blackburn')) {
-      answer = playerHasClub('blackburn') ? t.yes : t.no;
-    } else if (q.includes('bolton')) {
-      answer = playerHasClub('bolton') ? t.yes : t.no;
-    } else if (q.includes('sunderland')) {
-      answer = playerHasClub('sunderland') ? t.yes : t.no;
-    } else if (q.includes('psv')) {
-      answer = playerHasClub('psv') ? t.yes : t.no;
-    } else if (q.includes('bayer leverkusen') || q.includes('leverkusen')) {
-      answer = playerHasClub('leverkusen') ? t.yes : t.no;
-    } else if (q.includes('rb leipzig') || q.includes('leipzig')) {
-      answer = playerHasClub('leipzig') ? t.yes : t.no;
-    } else if (q.includes('schalke')) {
-      answer = playerHasClub('schalke') ? t.yes : t.no;
-    } else if (q.includes('hamburg')) {
-      answer = playerHasClub('hamburg') ? t.yes : t.no;
-    } else if (q.includes('werder bremen') || q.includes('bremen')) {
-      answer = playerHasClub('bremen') ? t.yes : t.no;
-    } else if (q.includes('villarreal')) {
-      answer = playerHasClub('villarreal') ? t.yes : t.no;
-    } else if (q.includes('deportivo')) {
-      answer = playerHasClub('deportivo') ? t.yes : t.no;
-    } else if (q.includes('real sociedad') || q.includes('sociedad')) {
-      answer = playerHasClub('sociedad') ? t.yes : t.no;
-    } else if (q.includes('crystal palace') || q.includes('palace')) {
-      answer = playerHasClub('palace') ? t.yes : t.no;
-    } else if (q.includes('swansea')) {
-      answer = playerHasClub('swansea') ? t.yes : t.no;
-    } else if (q.includes('southampton')) {
-      answer = playerHasClub('southampton') ? t.yes : t.no;
-    } else if (q.includes('fulham')) {
-      answer = playerHasClub('fulham') ? t.yes : t.no;
-    } else if (q.includes('brighton')) {
-      answer = playerHasClub('brighton') ? t.yes : t.no;
-    } else if (q.includes('watford')) {
-      answer = playerHasClub('watford') ? t.yes : t.no;
-    } else if (q.includes('stoke')) {
-      answer = playerHasClub('stoke') ? t.yes : t.no;
-    } else if (q.includes('flamengo')) {
-      answer = playerHasClub('flamengo') ? t.yes : t.no;
-    } else if (q.includes('corinthians')) {
-      answer = playerHasClub('corinthians') ? t.yes : t.no;
-    } else if (q.includes('river plate') || q.includes('river')) {
-      answer = playerHasClub('river') ? t.yes : t.no;
-    } else if (q.includes('boca juniors') || q.includes('boca')) {
-      answer = playerHasClub('boca') ? t.yes : t.no;
-    } else if (q.includes('santos')) {
-      answer = playerHasClub('santos') ? t.yes : t.no;
-    } else if (q.includes('palmeiras')) {
-      answer = playerHasClub('palmeiras') ? t.yes : t.no;
-    } else if (q.includes('inter miami') || q.includes('miami')) {
-      answer = playerHasClub('miami') ? t.yes : t.no;
-    } else if (q.includes('dynamo') || q.includes('kyiv')) {
-      answer = playerHasClub('dynamo') ? t.yes : t.no;
-    } else if (q.includes('shakhtar')) {
-      answer = playerHasClub('shakhtar') ? t.yes : t.no;
-    } else if (q.includes('zenit')) {
-      answer = playerHasClub('zenit') ? t.yes : t.no;
-    } else if (q.includes('spartak')) {
-      answer = playerHasClub('spartak') ? t.yes : t.no;
-    } else if (q.includes('galatasaray')) {
-      answer = playerHasClub('galatasaray') ? t.yes : t.no;
-    } else if (q.includes('fenerbahce')) {
-      answer = playerHasClub('fenerbahce') ? t.yes : t.no;
-    } else if (q.includes('besiktas')) {
-      answer = playerHasClub('besiktas') ? t.yes : t.no;
-    } else if (q.includes('bordeaux')) {
-      answer = playerHasClub('bordeaux') ? t.yes : t.no;
-    } else if (q.includes('lille')) {
-      answer = playerHasClub('lille') ? t.yes : t.no;
-    } else if (q.includes('montpellier')) {
-      answer = playerHasClub('montpellier') ? t.yes : t.no;
-    } else if (q.includes('verona')) {
-      answer = playerHasClub('verona') ? t.yes : t.no;
-    } else if (q.includes('sampdoria')) {
-      answer = playerHasClub('sampdoria') ? t.yes : t.no;
-    } else if (q.includes('genoa')) {
-      answer = playerHasClub('genoa') ? t.yes : t.no;
-    } else if (q.includes('torino')) {
-      answer = playerHasClub('torino') ? t.yes : t.no;
-    } else if (q.includes('bologna')) {
-      answer = playerHasClub('bologna') ? t.yes : t.no;
-    } else if (q.includes('valladolid')) {
-      answer = playerHasClub('valladolid') ? t.yes : t.no;
-    } else if (q.includes('sporting') || q.includes('lisbon')) {
-      answer = playerHasClub('sporting') ? t.yes : t.no;
-    } else if (q.includes('botafogo')) {
-      answer = playerHasClub('botafogo') ? t.yes : t.no;
-    } 
+    }
+    
     // GENERELL klubb-sjekk som siste utvei
     else if (q.includes('play') || q.includes('spill') || q.includes('club') || q.includes('klubb')) {
-      // Prøv alle klubber fra spillerens liste
       let foundMatch = false;
       for (const club of currentPlayer.clubs) {
         const normalizedClub = normalizeText(club);
@@ -843,21 +619,18 @@ function App() {
   const handleFinalGuess = () => {
     if (!finalGuess.trim()) return;
     
-    // FORBEDRET: Normaliser både gjetting og spillernavn for sammenligning
     const normalizedGuess = normalizeText(finalGuess);
     const normalizedPlayerName = normalizeText(currentPlayer.name);
     
-    // Splitt spillernavnet i deler (fornavn, mellomnavn, etternavn)
     const playerNameParts = normalizedPlayerName.split(' ');
     const guessParts = normalizedGuess.split(' ');
     
-    // Sjekk om gjetningen matcher hele navnet eller deler av det
     const isCorrect = 
-      normalizedGuess === normalizedPlayerName || // Eksakt match
-      normalizedPlayerName.includes(normalizedGuess) || // Gjetning er del av navnet
-      normalizedGuess.includes(normalizedPlayerName) || // Navnet er del av gjetningen
-      playerNameParts.some(part => part.length > 2 && guessParts.includes(part)) || // Matcher deler av navnet
-      (guessParts.length > 1 && playerNameParts.some(part => guessParts.includes(part) && part.length > 2)); // Matcher minst ett ord
+      normalizedGuess === normalizedPlayerName ||
+      normalizedPlayerName.includes(normalizedGuess) ||
+      normalizedGuess.includes(normalizedPlayerName) ||
+      playerNameParts.some(part => part.length > 2 && guessParts.includes(part)) ||
+      (guessParts.length > 1 && playerNameParts.some(part => guessParts.includes(part) && part.length > 2));
     
     const validQuestionsCount = questions.filter(q => q.counted).length;
     const filtersUsed = Object.values(useFilters).filter(f => f).length;
